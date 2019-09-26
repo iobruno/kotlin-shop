@@ -24,6 +24,10 @@ data class PhysicalOrder(override val items: List<Item>,
 
     lateinit var shippingAddress: Address
 
+    val parcels: () -> List<Parcel> = {
+        listOf<Parcel>()
+    }
+
     init {
         require(items.count {
             it.product.type != ProductType.PHYSICAL &&
