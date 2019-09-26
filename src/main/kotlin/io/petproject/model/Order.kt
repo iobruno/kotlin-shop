@@ -38,7 +38,11 @@ interface Order {
         require(items.isNotEmpty()) { "There must be at least one item to place the Order" }
     }
 
-    fun pay() = apply {  }
+    fun pay() = apply {
+        check(status.code >= OrderStatus.PENDING.code) { "Order must be placed before it can be payed" }
+        check(status.code < OrderStatus.NOT_SHIPPED.code) { "Order Payment has been processed already" }
+    }
+
 }
 
 data class PhysicalOrder(override val items: List<Item>,
@@ -72,16 +76,18 @@ data class PhysicalOrder(override val items: List<Item>,
     }
 
     override fun place() = apply {
-        super.place()
         require(this::shippingAddress.isInitialized) { "Shipping Address must be informed for Orders with physical delivery" }
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
 
+        super.place()
         this.feesAndDiscounts["shippingAndHandling"] = Parcel.shippingCostsOf(parcels())
         this.feesAndDiscounts["importationTaxes"] = Parcel.importationFeesOf(parcels())
         this.status = OrderStatus.PENDING
     }
 
     override fun pay() = apply {
+        check(this::status.isInitialized) { "Order must be placed before it can be payed" }
+
         super.pay()
         //TODO("Process Payment")
         this.status = OrderStatus.NOT_SHIPPED
@@ -109,13 +115,16 @@ data class DigitalOrder(override val items: List<Item>,
     }
 
     override fun place() = apply {
-        super.place()
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
+
+        super.place()
         this.feesAndDiscounts["Voucher"] = BigDecimal("-10")
         this.status = OrderStatus.PENDING
     }
 
     override fun pay() = apply {
+        check(this::status.isInitialized) { "Order must be placed before it can be payed" }
+
         super.pay()
         //TODO("Process Payment")
         this.status = OrderStatus.UNSENT
@@ -148,12 +157,15 @@ data class SubscriptionOrder(override val items: List<Item>,
     }
 
     override fun place() = apply {
-        super.place()
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
+
+        super.place()
         this.status = OrderStatus.PENDING
     }
 
     override fun pay() = apply {
+        check(this::status.isInitialized) { "Order must be placed before it can be payed" }
+
         super.pay()
         //TODO("Process Payment")
         this.status = OrderStatus.PENDING_ACTIVATION
