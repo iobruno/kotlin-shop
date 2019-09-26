@@ -135,4 +135,45 @@ internal class PhysicalOrderTest {
 
         assertThat(physicalOrder.grandTotal().toPlainString()).isEqualTo("3276.14")
     }
+
+    @Test
+    fun `when paying for Physical Order, throw IllegalStateEx if Status is not PENDING`() {
+        val physicalItems = listOf(physicalItems, physicalTaxFreeItems).flatten()
+        val physicalOrder = PhysicalOrder(physicalItems, account)
+                .withShippingAddress(shippingAddress)
+                .withPaymentMethod(paymentMethod)
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            physicalOrder.pay()
+        }
+        assertThat(ex.message).isEqualTo("Order must be placed before it can be payed")
+    }
+
+    @Test
+    fun `when paying for Physical Order, Status should be updated to NOT_SHIPPED once the payment is done`() {
+        val physicalItems = listOf(physicalItems, physicalTaxFreeItems).flatten()
+        val physicalOrder = PhysicalOrder(physicalItems, account)
+                .withShippingAddress(shippingAddress)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+
+        assertThat(physicalOrder.status).isEqualTo(OrderStatus.NOT_SHIPPED)
+    }
+
+    @Test
+    fun `when paying for Physical Order that was already payed, throw IllegalArgEx`() {
+        val physicalItems = listOf(physicalItems, physicalTaxFreeItems).flatten()
+        val physicalOrder = PhysicalOrder(physicalItems, account)
+                .withShippingAddress(shippingAddress)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            physicalOrder.pay()
+        }
+        assertThat(ex.message).isEqualTo("Order Payment has been processed already")
+    }
+
 }
