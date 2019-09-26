@@ -10,8 +10,8 @@ interface Order {
     val account: Account
 
     var paymentMethod: PaymentMethod
+    var status: OrderStatus
     val type: OrderType
-
 
     fun subtotal(): BigDecimal {
         return items.map { it.subtotal }
@@ -38,7 +38,7 @@ interface Order {
         require(items.isNotEmpty()) { "There must be at least one item to place the Order" }
     }
 
-    fun pay(): Order
+    fun pay() = apply {  }
 }
 
 data class PhysicalOrder(override val items: List<Item>,
@@ -46,6 +46,7 @@ data class PhysicalOrder(override val items: List<Item>,
 
     override val feesAndDiscounts = HashMap<String, BigDecimal>()
     override lateinit var paymentMethod: PaymentMethod
+    override lateinit var status: OrderStatus
 
     override val type: OrderType = OrderType.PHYSICAL
     lateinit var shippingAddress: Address
@@ -77,10 +78,13 @@ data class PhysicalOrder(override val items: List<Item>,
 
         this.feesAndDiscounts["shippingAndHandling"] = Parcel.shippingCostsOf(parcels())
         this.feesAndDiscounts["importationTaxes"] = Parcel.importationFeesOf(parcels())
+        this.status = OrderStatus.PENDING
     }
 
     override fun pay() = apply {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        super.pay()
+        //TODO("Process Payment")
+        this.status = OrderStatus.NOT_SHIPPED
     }
 }
 
@@ -90,6 +94,7 @@ data class DigitalOrder(override val items: List<Item>,
 
     override val feesAndDiscounts = HashMap<String, BigDecimal>()
     override lateinit var paymentMethod: PaymentMethod
+    override lateinit var status: OrderStatus
 
     override val type = OrderType.DIGITAL
 
@@ -107,10 +112,13 @@ data class DigitalOrder(override val items: List<Item>,
         super.place()
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
         this.feesAndDiscounts["Voucher"] = BigDecimal("-10")
+        this.status = OrderStatus.PENDING
     }
 
     override fun pay() = apply {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        super.pay()
+        //TODO("Process Payment")
+        this.status = OrderStatus.UNSENT
     }
 }
 
@@ -122,6 +130,7 @@ data class SubscriptionOrder(override val items: List<Item>,
 
     override val feesAndDiscounts = HashMap<String, BigDecimal>()
     override lateinit var paymentMethod: PaymentMethod
+    override lateinit var status: OrderStatus
 
     override val type = OrderType.SUBSCRIPTION
 
@@ -141,10 +150,13 @@ data class SubscriptionOrder(override val items: List<Item>,
     override fun place() = apply {
         super.place()
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
+        this.status = OrderStatus.PENDING
     }
 
     override fun pay() = apply {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        super.pay()
+        //TODO("Process Payment")
+        this.status = OrderStatus.PENDING_ACTIVATION
     }
 }
 
@@ -155,7 +167,6 @@ enum class OrderType {
 }
 
 enum class OrderStatus(val code: Int = 0) {
-    UNKNOWN,
     PENDING(100),
     NOT_SHIPPED(200),
     UNSENT(200),
