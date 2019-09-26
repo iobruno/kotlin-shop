@@ -139,7 +139,8 @@ data class SubscriptionOrder(override val items: List<Item>,
     }
 
     override fun place() = apply {
-        require(this::paymentMethod.isInitialized)
+        super.place()
+        require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
     }
 
     override fun pay() = apply {
