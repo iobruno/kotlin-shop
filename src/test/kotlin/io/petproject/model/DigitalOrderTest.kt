@@ -84,5 +84,38 @@ internal class DigitalOrderTest {
         assertThat(digitalOrder.grandTotal().toPlainString()).isEqualTo("514.60")
     }
 
+    @Test
+    fun `when paying for a Digital Order, throw IllegalStateEx if Status is not PENDING`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            digitalOrder.pay()
+        }
+        assertThat(ex.message).isEqualTo("Order must be placed before it can be payed")
+    }
+
+    @Test
+    fun `when paying for a Digital Order, Status should be updated to UNSENT once pay is successful`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+        assertThat(digitalOrder.status).isEqualTo(OrderStatus.UNSENT)
+    }
+
+    @Test
+    fun `when paying for a Digital Order that was already payed, throw IllegalArgEx`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            digitalOrder.pay()
+        }
+        assertThat(ex.message).isEqualTo("Order Payment has been processed already")
+    }
+
 
 }
