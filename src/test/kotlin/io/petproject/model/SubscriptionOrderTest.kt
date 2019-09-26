@@ -86,4 +86,41 @@ internal class SubscriptionOrderTest {
         assertThat(membershipOrder.grandTotal().toPlainString()).isEqualTo("29.90")
     }
 
+    @Test
+    fun `when paying for Membership Order, throw IllegalStateEx if Status is not PENDING`() {
+        val membershipOrder = SubscriptionOrder(subscriptions[0], account)
+                .withPaymentMethod(paymentMethod)
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            membershipOrder.pay()
+        }
+
+        assertThat(ex.message).isEqualTo("Order must be placed before it can be payed")
+    }
+
+    @Test
+    fun `when paying for Membership Order, Status should be updated to PENDING_ACTIVATION once pay is successful`() {
+        val membershipOrder = SubscriptionOrder(subscriptions[0], account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+
+        assertThat(membershipOrder.status).isEqualTo(OrderStatus.PENDING_ACTIVATION)
+    }
+
+    @Test
+    fun `when paying for Membership Order that was already payed, throw IllegalArgEx`() {
+        val membershipOrder = SubscriptionOrder(subscriptions[0], account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            membershipOrder.pay()
+        }
+
+        assertThat(ex.message).isEqualTo("Order Payment has been processed already")
+    }
+
+
 }
