@@ -24,6 +24,14 @@ data class PhysicalOrder(override val items: List<Item>,
 
     lateinit var shippingAddress: Address
 
+    init {
+        require(items.count {
+            it.product.type != ProductType.PHYSICAL &&
+            it.product.type != ProductType.PHYSICAL_TAX_FREE } == 0) {
+            "A Physical Order may only contain Physical items"
+        }
+    }
+
     fun withShippingAddress(address: Address) = apply {
         this.shippingAddress = address
     }
@@ -50,6 +58,12 @@ data class DigitalOrder(override val items: List<Item>,
     override val type = OrderType.DIGITAL
     override lateinit var paymentMethod: PaymentMethod
 
+    init {
+        require(items.count { it.product.type != ProductType.DIGITAL } == 0) {
+            "A Digital Order may only contain Digital items"
+        }
+    }
+
     override fun withPaymentMethod(paymentMethod: PaymentMethod) = apply {
         super.withPaymentMethod(paymentMethod)
     }
@@ -71,6 +85,15 @@ data class SubscriptionOrder(override val items: List<Item>,
 
     override val type = OrderType.SUBSCRIPTION
     override lateinit var paymentMethod: PaymentMethod
+
+    init {
+        require(items.count { it.product.type != ProductType.SUBSCRIPTION } == 0) {
+            "A Membership Order may only contain Membership items"
+        }
+        require(items.count() == 1) {
+            "A Membership Order may only contain one Membership subscription"
+        }
+    }
 
     override fun withPaymentMethod(paymentMethod: PaymentMethod) = apply {
         super.withPaymentMethod(paymentMethod)
