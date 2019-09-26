@@ -3,7 +3,6 @@ package io.petproject.model
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-
 interface Order {
     val items: List<Item>
     val feesAndDiscounts: Map<String, BigDecimal>
@@ -53,8 +52,10 @@ interface Order {
         check(status.code < OrderStatus.SHIPPED.code) { "Order Fulfillment has been processed already" }
     }
 
-    fun complete() = apply { }
-
+    fun complete() = apply {
+        check(status.code >= OrderStatus.SHIPPED.code) { "Order must have been shipped/sent and confirmed, before it can be completed" }
+        check(status.code < OrderStatus.DELIVERED.code) { "Order has been delivered already" }
+    }
 }
 
 data class PhysicalOrder(override val items: List<Item>,
@@ -112,6 +113,8 @@ data class PhysicalOrder(override val items: List<Item>,
 
     override fun complete() = apply {
         super.complete()
+        // TODO: Track the Packages until all packages are delivered
+        this.status = OrderStatus.DELIVERED
     }
 }
 
@@ -158,8 +161,9 @@ data class DigitalOrder(override val items: List<Item>,
 
     override fun complete() = apply {
         super.complete()
+        // TODO:: Track when the the Buyer clicks on the emailed link to redeem the item
+        this.status = OrderStatus.REDEEMED
     }
-
 }
 
 
