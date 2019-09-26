@@ -48,6 +48,10 @@ interface Order {
         return Invoice(this)
     }
 
+    fun fulfill() = apply { }
+
+    fun complete() = apply { }
+
 }
 
 data class PhysicalOrder(override val items: List<Item>,
@@ -83,7 +87,6 @@ data class PhysicalOrder(override val items: List<Item>,
     override fun place() = apply {
         require(this::shippingAddress.isInitialized) { "Shipping Address must be informed for Orders with physical delivery" }
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
-
         super.place()
         this.feesAndDiscounts["shippingAndHandling"] = Parcel.shippingCostsOf(parcels())
         this.feesAndDiscounts["importationTaxes"] = Parcel.importationFeesOf(parcels())
@@ -92,10 +95,17 @@ data class PhysicalOrder(override val items: List<Item>,
 
     override fun pay() = apply {
         check(this::status.isInitialized) { "Order must be placed before it can be payed" }
-
         super.pay()
         //TODO("Process Payment")
         this.status = OrderStatus.NOT_SHIPPED
+    }
+
+    override fun fulfill() = apply {
+        super.fulfill()
+    }
+
+    override fun complete() = apply {
+        super.complete()
     }
 }
 
@@ -121,7 +131,6 @@ data class DigitalOrder(override val items: List<Item>,
 
     override fun place() = apply {
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
-
         super.place()
         this.feesAndDiscounts["Voucher"] = BigDecimal("-10")
         this.status = OrderStatus.PENDING
@@ -129,11 +138,19 @@ data class DigitalOrder(override val items: List<Item>,
 
     override fun pay() = apply {
         check(this::status.isInitialized) { "Order must be placed before it can be payed" }
-
         super.pay()
         //TODO("Process Payment")
         this.status = OrderStatus.UNSENT
     }
+
+    override fun fulfill() = apply {
+        super.fulfill()
+    }
+
+    override fun complete() = apply {
+        super.complete()
+    }
+
 }
 
 
@@ -163,18 +180,25 @@ data class SubscriptionOrder(override val items: List<Item>,
 
     override fun place() = apply {
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
-
         super.place()
         this.status = OrderStatus.PENDING
     }
 
     override fun pay() = apply {
         check(this::status.isInitialized) { "Order must be placed before it can be payed" }
-
         super.pay()
         //TODO("Process Payment")
         this.status = OrderStatus.PENDING_ACTIVATION
     }
+
+    override fun fulfill() = apply {
+        super.fulfill()
+    }
+
+    override fun complete() = apply {
+        super.complete()
+    }
+
 }
 
 enum class OrderType {
