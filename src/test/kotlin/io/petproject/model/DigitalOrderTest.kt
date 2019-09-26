@@ -12,7 +12,6 @@ internal class DigitalOrderTest {
     private lateinit var paymentMethod: PaymentMethod
     private lateinit var digitalItems: List<Item>
 
-
     @BeforeEach
     fun setup() {
         val billingAddress = Address.Builder()
@@ -118,5 +117,26 @@ internal class DigitalOrderTest {
         assertThat(ex.message).isEqualTo("Order Payment has been processed already")
     }
 
+    @Test
+    fun `when fulfilling a Digital Order, throw IllegalStateEx if Status is not PAYMENT_COMPLETE`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            digitalOrder.fulfill()
+        }
+        assertThat(ex.message).isEqualTo("Order must be placed and payed before it can be fulfilled")
+    }
+
+    @Test
+    fun `when fulfilling a Digital Order, Status should be updated to SENT`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+                .fulfill()
+        assertThat(digitalOrder.status).isEqualTo(OrderStatus.SENT)
+    }
 
 }
