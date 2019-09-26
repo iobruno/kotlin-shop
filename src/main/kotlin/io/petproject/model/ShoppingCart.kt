@@ -1,5 +1,6 @@
 package io.petproject.model
 
+import io.petproject.model.ProductType.*
 import java.lang.IllegalArgumentException
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -43,7 +44,20 @@ class ShoppingCart {
     }
 
     fun checkout(account: Account): List<Order> {
-        TODO("implement checkout for a variety of items in the cart")
+        return items.values.asSequence()
+                .groupBy {
+                    if (it.product.type == PHYSICAL_TAX_FREE)
+                        ProductType.PHYSICAL
+                    else
+                        it.product.type
+                }.map { (type, items) ->
+                    when(type) {
+                        PHYSICAL -> listOf(PhysicalOrder(items, account))
+                        DIGITAL -> listOf(DigitalOrder(items, account))
+                        SUBSCRIPTION -> items.map { SubscriptionOrder(it, account) }
+                        else -> throw IllegalStateException("Unmapped ProductType to Order")
+                    }
+                }.flatten()
     }
 
 }
