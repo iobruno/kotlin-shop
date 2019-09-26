@@ -1,11 +1,34 @@
 package io.petproject.model
 
+import java.math.BigDecimal
+import java.math.RoundingMode
+
 
 interface Order {
     val items: List<Item>
+    val feesAndDiscounts: Map<String, BigDecimal>
     val account: Account
+
     var paymentMethod: PaymentMethod
     val type: OrderType
+
+
+    fun subtotal(): BigDecimal {
+        return items.map { it.subtotal }
+                .fold(BigDecimal.ZERO) { acc, value -> acc.plus(value) }
+                .setScale(2, RoundingMode.HALF_UP)
+    }
+
+    fun feesAndDiscounts(): BigDecimal {
+        return feesAndDiscounts.values
+                .asSequence()
+                .fold(BigDecimal.ZERO) { acc, value -> acc.plus(value) }
+                .setScale(2, RoundingMode.HALF_UP)
+    }
+
+    fun grandTotal(): BigDecimal {
+        return subtotal().plus(feesAndDiscounts())
+    }
 
     fun withPaymentMethod(paymentMethod: PaymentMethod) = apply {
         this.paymentMethod = paymentMethod
@@ -19,9 +42,10 @@ interface Order {
 data class PhysicalOrder(override val items: List<Item>,
                          override val account: Account) : Order {
 
-    override val type = OrderType.PHYSICAL
+    override val feesAndDiscounts = HashMap<String, BigDecimal>()
     override lateinit var paymentMethod: PaymentMethod
 
+    override val type: OrderType = OrderType.PHYSICAL
     lateinit var shippingAddress: Address
 
     val parcels: () -> List<Parcel> = {
@@ -59,8 +83,10 @@ data class PhysicalOrder(override val items: List<Item>,
 data class DigitalOrder(override val items: List<Item>,
                         override val account: Account) : Order {
 
-    override val type = OrderType.DIGITAL
+    override val feesAndDiscounts = HashMap<String, BigDecimal>()
     override lateinit var paymentMethod: PaymentMethod
+
+    override val type = OrderType.DIGITAL
 
     init {
         require(items.count { it.product.type != ProductType.DIGITAL } == 0) {
@@ -87,8 +113,10 @@ data class SubscriptionOrder(override val items: List<Item>,
 
     constructor(item: Item, account: Account): this(listOf(item), account)
 
-    override val type = OrderType.SUBSCRIPTION
+    override val feesAndDiscounts = HashMap<String, BigDecimal>()
     override lateinit var paymentMethod: PaymentMethod
+
+    override val type = OrderType.SUBSCRIPTION
 
     init {
         require(items.count { it.product.type != ProductType.SUBSCRIPTION } == 0) {
