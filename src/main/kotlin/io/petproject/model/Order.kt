@@ -48,7 +48,10 @@ interface Order {
         return Invoice(this)
     }
 
-    fun fulfill() = apply { }
+    fun fulfill() = apply{
+        check(status.code >= OrderStatus.NOT_SHIPPED.code) { "Order must be placed and payed before it can be fulfilled" }
+        check(status.code < OrderStatus.SHIPPED.code) { "Order Fulfillment has been processed already" }
+    }
 
     fun complete() = apply { }
 
@@ -102,6 +105,9 @@ data class PhysicalOrder(override val items: List<Item>,
 
     override fun fulfill() = apply {
         super.fulfill()
+        // TODO: Notify Buyer via email
+        // TODO: Notify Seller about the Order to initiate the Processing & Shipping
+        this.status = OrderStatus.SHIPPED
     }
 
     override fun complete() = apply {
@@ -145,6 +151,9 @@ data class DigitalOrder(override val items: List<Item>,
 
     override fun fulfill() = apply {
         super.fulfill()
+        // TODO: Notify Buyer via email
+        // TODO: Prepare Download Link and send it to the buyer
+        this.status = OrderStatus.SENT
     }
 
     override fun complete() = apply {
@@ -193,6 +202,8 @@ data class SubscriptionOrder(override val items: List<Item>,
 
     override fun fulfill() = apply {
         super.fulfill()
+        // TODO: Activate the Subscription Service
+        this.status = OrderStatus.ACTIVATED
     }
 
     override fun complete() = apply {
