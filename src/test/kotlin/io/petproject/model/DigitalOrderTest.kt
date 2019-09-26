@@ -53,8 +53,9 @@ internal class DigitalOrderTest {
     @Test
     fun `when placing a DigitalOrder, there must be at least one item in the list`() {
         val ex = assertThrows(IllegalArgumentException::class.java) {
-            val digitalOrder = DigitalOrder(listOf(), account)
-            digitalOrder.place()
+            DigitalOrder(listOf(), account)
+                    .withPaymentMethod(paymentMethod)
+                    .place()
         }
         assertThat(ex.message).isEqualTo("There must be at least one item to place the Order")
     }
@@ -105,7 +106,7 @@ internal class DigitalOrderTest {
     }
 
     @Test
-    fun `when paying for a Digital Order that was already payed, throw IllegalArgEx`() {
+    fun `when paying for a Digital Order that was already payed, throw IllegalStateEx`() {
         val digitalOrder = DigitalOrder(digitalItems, account)
                 .withPaymentMethod(paymentMethod)
                 .place()

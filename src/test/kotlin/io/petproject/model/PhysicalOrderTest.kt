@@ -64,8 +64,10 @@ internal class PhysicalOrderTest {
     @Test
     fun `when placing a PhysicalOrder, there must be at least one item in the list`() {
         val ex = assertThrows(IllegalArgumentException::class.java) {
-            val physicalOrder = PhysicalOrder(listOf(), account)
-            physicalOrder.place()
+            PhysicalOrder(listOf(), account)
+                    .withShippingAddress(shippingAddress)
+                    .withPaymentMethod(paymentMethod)
+                    .place()
         }
         assertThat(ex.message).isEqualTo("There must be at least one item to place the Order")
     }
@@ -73,9 +75,9 @@ internal class PhysicalOrderTest {
     @Test
     fun `when placing a Physical Order, a shippingAddress must be informed`() {
         val ex = assertThrows(IllegalArgumentException::class.java) {
-            val physicalOrder = PhysicalOrder(physicalItems, account)
+            PhysicalOrder(physicalItems, account)
                     .withPaymentMethod(paymentMethod)
-            physicalOrder.place()
+                    .place()
         }
         assertThat(ex.message).isEqualTo("Shipping Address must be informed for Orders with physical delivery")
     }
@@ -83,9 +85,9 @@ internal class PhysicalOrderTest {
     @Test
     fun `when placing a PhysicalOrder, a paymentMethod must be informed`() {
         val ex = assertThrows(IllegalArgumentException::class.java) {
-            val physicalOrder = PhysicalOrder(physicalItems, account)
-            physicalOrder.withShippingAddress(shippingAddress)
-            physicalOrder.place()
+            PhysicalOrder(physicalItems, account)
+                    .withShippingAddress(shippingAddress)
+                    .place()
         }
         assertThat(ex.message).isEqualTo("A Payment method must be informed to place the Order")
     }

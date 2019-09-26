@@ -109,7 +109,7 @@ internal class SubscriptionOrderTest {
     }
 
     @Test
-    fun `when paying for Membership Order that was already payed, throw IllegalArgEx`() {
+    fun `when paying for Membership Order that was already payed, throw IllegalStateEx`() {
         val membershipOrder = SubscriptionOrder(subscriptions[0], account)
                 .withPaymentMethod(paymentMethod)
                 .place()
