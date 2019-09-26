@@ -139,4 +139,29 @@ internal class DigitalOrderTest {
         assertThat(digitalOrder.status).isEqualTo(OrderStatus.SENT)
     }
 
+    @Test
+    fun `when completing a Digital Order, throw IllegalStateEx if Status is not UNSENT`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            digitalOrder.complete()
+        }
+        assertThat(ex.message).isEqualTo("Order must have been shipped/sent and confirmed, before it can be completed")
+    }
+
+    @Test
+    fun `when completing a Digital Order, Status should be updated to REDEEMED`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+                .fulfill()
+                .complete()
+        assertThat(digitalOrder.status).isEqualTo(OrderStatus.REDEEMED)
+    }
+
+
 }

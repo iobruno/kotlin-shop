@@ -205,4 +205,33 @@ internal class PhysicalOrderTest {
         assertThat(physicalOrder.status).isEqualTo(OrderStatus.SHIPPED)
     }
 
+    @Test
+    fun `when completing a Physical Order, throw IllegalStateEx if Status is not SHIPPED`() {
+        val physicalItems = listOf(physicalItems, physicalTaxFreeItems).flatten()
+        val physicalOrder = PhysicalOrder(physicalItems, account)
+                .withShippingAddress(shippingAddress)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+
+        val ex = assertThrows(IllegalStateException::class.java) {
+            physicalOrder.complete()
+        }
+        assertThat(ex.message).isEqualTo("Order must have been shipped/sent and confirmed, before it can be completed")
+    }
+
+    @Test
+    fun `when completing a Physical Order, Status should be updated to DELIVERED`() {
+        val physicalItems = listOf(physicalItems, physicalTaxFreeItems).flatten()
+        val physicalOrder = PhysicalOrder(physicalItems, account)
+                .withShippingAddress(shippingAddress)
+                .withPaymentMethod(paymentMethod)
+                .place()
+                .pay()
+                .fulfill()
+                .complete()
+
+        assertThat(physicalOrder.status).isEqualTo(OrderStatus.DELIVERED)
+    }
+
 }
