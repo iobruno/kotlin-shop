@@ -93,7 +93,6 @@ data class PhysicalOrder(override val items: List<Item>,
         require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
         super.place()
         this.feesAndDiscounts["shippingAndHandling"] = Parcel.shippingCostsOf(parcels())
-        this.feesAndDiscounts["importationTaxes"] = Parcel.importationFeesOf(parcels())
         this.status = OrderStatus.PENDING
     }
 
