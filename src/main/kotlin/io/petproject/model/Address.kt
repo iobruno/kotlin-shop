@@ -6,4 +6,24 @@ data class Address(val country: String,
                    val city: String,
                    val state: String) {
 
+    class Builder {
+        private lateinit var country: String
+        private lateinit var streetAddress: String
+        private lateinit var zipCode: String
+        private lateinit var city: String
+        private lateinit var state: String
+
+        fun country(country: String) = apply { this.country = country.trim() }
+
+        fun streetAddress(streetAddress: String) = apply { this.streetAddress = streetAddress.trim() }
+
+        fun zipCode(zipCode: String) = apply { this.zipCode = zipCode.trim() }
+
+        fun city(city: String) = apply { this.city = city.trim() }
+
+        fun state(state: String) = apply { this.state = state.trim() }
+
+        fun build() = Address(country, streetAddress, zipCode, city, state)
+    }
+
 }
