@@ -104,7 +104,9 @@ data class DigitalOrder(override val items: List<Item>,
     }
 
     override fun place() = apply {
-        require(this::paymentMethod.isInitialized)
+        super.place()
+        require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
+        this.feesAndDiscounts["Voucher"] = BigDecimal("-10")
     }
 
     override fun pay() = apply {
