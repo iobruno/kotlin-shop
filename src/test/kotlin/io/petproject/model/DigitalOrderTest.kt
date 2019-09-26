@@ -163,5 +163,4 @@ internal class DigitalOrderTest {
         assertThat(digitalOrder.status).isEqualTo(OrderStatus.REDEEMED)
     }
 
-
 }

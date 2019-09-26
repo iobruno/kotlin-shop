@@ -210,9 +210,7 @@ data class SubscriptionOrder(override val items: List<Item>,
         this.status = OrderStatus.ACTIVATED
     }
 
-    override fun complete() = apply {
-        super.complete()
-    }
+    override fun complete() = apply { }
 
 }
 
