@@ -1,6 +1,6 @@
 package io.petproject.model
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,7 +47,43 @@ internal class SubscriptionOrderTest {
             val product = Product("physical product", ProductType.PHYSICAL, 1.99)
             SubscriptionOrder(listOf(Item(product, 1)), account)
         }
-        Assertions.assertThat(ex.message).isEqualTo("A Membership Order may only contain Membership items")
+        assertThat(ex.message).isEqualTo("A Membership Order may only contain Membership items")
+    }
+
+    @Test
+    fun `when placing a MembershipOrder, a paymentMethod must be informed`() {
+        val ex = assertThrows(IllegalArgumentException::class.java) {
+            SubscriptionOrder(subscriptions[0], account).place()
+        }
+        assertThat(ex.message).isEqualTo("A Payment method must be informed to place the Order")
+    }
+
+    @Test
+    fun `when placing a MembershipOrder, there must be exactly one item in the list`() {
+        val ex = assertThrows(IllegalArgumentException::class.java) {
+            SubscriptionOrder(subscriptions, account)
+                    .withPaymentMethod(paymentMethod)
+                    .place()
+        }
+        assertThat(ex.message).isEqualTo("A Membership Order may only contain one Membership subscription")
+    }
+
+    @Test
+    fun `when placing a Membership Order, subtotal should be equalTo the Item price`() {
+        val membershipOrder = SubscriptionOrder(subscriptions[0], account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+
+        assertThat(membershipOrder.subtotal().toPlainString()).isEqualTo("29.90")
+    }
+
+    @Test
+    fun `when placing a Membership Order, total should be equalTo the Subtotal`() {
+        val membershipOrder = SubscriptionOrder(subscriptions[0], account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+
+        assertThat(membershipOrder.grandTotal().toPlainString()).isEqualTo("29.90")
     }
 
 }
