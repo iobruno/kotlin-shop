@@ -34,7 +34,9 @@ interface Order {
         this.paymentMethod = paymentMethod
     }
 
-    fun place(): Order
+    fun place() = apply {
+        require(items.isNotEmpty()) { "There must be at least one item to place the Order" }
+    }
 
     fun pay(): Order
 }
@@ -49,7 +51,7 @@ data class PhysicalOrder(override val items: List<Item>,
     lateinit var shippingAddress: Address
 
     val parcels: () -> List<Parcel> = {
-        listOf<Parcel>()
+        Parcel.breakdown(items, shippingAddress)
     }
 
     init {
@@ -69,14 +71,17 @@ data class PhysicalOrder(override val items: List<Item>,
     }
 
     override fun place() = apply {
-        require(this::shippingAddress.isInitialized)
-        require(this::paymentMethod.isInitialized)
+        super.place()
+        require(this::shippingAddress.isInitialized) { "Shipping Address must be informed for Orders with physical delivery" }
+        require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
+
+        this.feesAndDiscounts["shippingAndHandling"] = Parcel.shippingCostsOf(parcels())
+        this.feesAndDiscounts["importationTaxes"] = Parcel.importationFeesOf(parcels())
     }
 
     override fun pay() = apply {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 }
 
 
