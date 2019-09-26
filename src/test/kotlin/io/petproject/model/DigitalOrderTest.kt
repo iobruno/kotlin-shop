@@ -50,4 +50,39 @@ internal class DigitalOrderTest {
         assertThat(ex.message).isEqualTo("A Digital Order may only contain Digital items")
     }
 
+    @Test
+    fun `when placing a DigitalOrder, there must be at least one item in the list`() {
+        val ex = assertThrows(IllegalArgumentException::class.java) {
+            val digitalOrder = DigitalOrder(listOf(), account)
+            digitalOrder.place()
+        }
+        assertThat(ex.message).isEqualTo("There must be at least one item to place the Order")
+    }
+
+    @Test
+    fun `when placing a DigitalOrder, a paymentMethod must be informed`() {
+        val ex = assertThrows(IllegalArgumentException::class.java) {
+            val digitalOrder = DigitalOrder(digitalItems, account)
+            digitalOrder.place()
+        }
+        assertThat(ex.message).isEqualTo("A Payment method must be informed to place the Order")
+    }
+
+    @Test
+    fun `when placing a Digital Order, subtotal should compute overall sum of all Item prices`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+        assertThat(digitalOrder.subtotal().toPlainString()).isEqualTo("524.60")
+    }
+
+    @Test
+    fun `when placing a Digital Order, total should compute subtotal plus discounts for Digital Items`() {
+        val digitalOrder = DigitalOrder(digitalItems, account)
+                .withPaymentMethod(paymentMethod)
+                .place()
+        assertThat(digitalOrder.grandTotal().toPlainString()).isEqualTo("514.60")
+    }
+
+
 }
