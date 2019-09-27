@@ -127,7 +127,7 @@ May only contain products which the `ProductType` is 'Physical' or 'PHYSICAL_TAX
     
 ### Digital Order 
 
-May only contain items of the `ItemType` 'Digital'    
+May only contain products which the `ProductType` is 'Digital'
 
   - `place()`: 
     - Includes a `Voucher` discount of $10 for the Order
@@ -147,9 +147,9 @@ May only contain items of the `ItemType` 'Digital'
     -  `// TODO:`: Track when the the Buyer clicks on the emailed link to redeem the item
     - Updates the OrderStatus to `REDEEMED`    
 
-### MembershipOrder
+### SubscriptionOrder
 
-May only contain items of the `ItemType` 'Membership'
+May only contain products which the `ProductType` is 'Subscription'
 
   - `place()`:
     - Ensures there's only one Subscription per Order
@@ -191,3 +191,10 @@ and also to wrap all the complexity of creating an Order, this Shopping Cart ent
     - Each item that falls under `Membership` will create a different Membership Order 
     (due to the complexity of activating each subscription individually, and probably through 3rd-party APIs) 
     
+
+### TODO
+
+- [x] Automated builds with CI 
+- [x] Code Coverage check
+- [x] Code Inspection for maintainability
+- [ ] Ship with GraalVM 
