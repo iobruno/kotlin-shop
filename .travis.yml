@@ -1,0 +1,15 @@
+language: java
+install: true
+
+os: linux
+dist: trusty
+
+jdk:
+  - openjdk11
+before_script:
+  - chmod +x gradlew
+script:
+  - ./gradlew build
+  - ./gradlew codeCoverage
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
