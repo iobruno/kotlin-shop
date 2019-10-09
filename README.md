@@ -9,21 +9,9 @@ For this, I'm simulating an eCommerce platform as close as I can, model-wise.
 I took inspiration based on my understanding of how Amazon handles Physical, Digital
 and Subscription Orders
 
-## Up and Running
-
-**Requirements**
-- JDK 8+ (also tested with OpenJDK11 :heavy_check_mark:)
+## Tech Stack
+- Kotlin 1.3.+
 - Gradle
-
-**Building**
-```
-./gradlew build
-```
-
-**Testing**
-```
-./gradlew test
-```
 
 ## Usage
 ```kotlin
@@ -52,7 +40,7 @@ fun main() {
         .country("Brazil")
         .city("Sao Paulo")
         .state("SP")
-        .postalCode("01000-000")
+        .zipCode("01000-000")
         .streetAddress("Av Paulista, 1000")
         .build()
 
@@ -190,11 +178,10 @@ and also to wrap all the complexity of creating an Order, this Shopping Cart ent
     - All items that fall under `Digital` are grouped together to create a `DigitalOrder`      
     - Each item that falls under `Membership` will create a different Membership Order 
     (due to the complexity of activating each subscription individually, and probably through 3rd-party APIs) 
-    
 
-### TODO
+## TODO
 
 - [x] Automated builds with CI 
 - [x] Code Coverage check
 - [x] Code Inspection for maintainability
-- [ ] Ship with GraalVM 
+- [ ] Ship with GraalVM
