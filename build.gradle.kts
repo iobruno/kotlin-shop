@@ -1,8 +1,6 @@
-val junitVersion: String by project
-val assertJVersion: String by project
-
 plugins {
-    kotlin("jvm").version("1.3.50")
+    val kotlinVersion = "1.3.60"
+    kotlin("jvm") version kotlinVersion
     jacoco
 }
 
@@ -15,9 +13,11 @@ repositories {
 }
 
 dependencies {
+    val junitVersion = "5.5.2"
+    val assertJVersion = "3.13.2"
     implementation(kotlin("stdlib"))
-    testImplementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
-    testImplementation("org.assertj:assertj-core:${assertJVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testImplementation("org.assertj:assertj-core:$assertJVersion")
 }
 
 tasks.withType<Test> {
