@@ -1,6 +1,5 @@
 plugins {
-    val kotlinVersion = "1.3.60"
-    kotlin("jvm") version kotlinVersion
+    kotlin("jvm") version "1.4.10"
     jacoco
 }
 
@@ -13,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    val junitVersion = "5.5.2"
-    val assertJVersion = "3.13.2"
+    val junitVersion = "5.7.0"
+    val assertJVersion = "3.17.2"
     implementation(kotlin("stdlib"))
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.assertj:assertj-core:$assertJVersion")
