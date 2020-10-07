@@ -1,23 +1,23 @@
 package io.petproject.model
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 
 internal class ProductTest {
 
     @Test
     fun `when name is blank, throw IllegalArgEx`() {
-        assertThrows(IllegalArgumentException::class.java) {
-            Product(" ", ProductType.PHYSICAL, 1.99)
-        }
+        assertThatThrownBy { Product(" ", ProductType.PHYSICAL, 1.99) }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("Product name must not be blank")
     }
 
     @Test
     fun `when price is lower than or equalTo 0, throw IllegalArgEx`() {
-        assertThrows(IllegalArgumentException::class.java) {
-            Product("product", ProductType.PHYSICAL, 0.0)
-        }
+        assertThatThrownBy { Product("product", ProductType.PHYSICAL, 0.0) }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("Produce price must be greaterThan 0")
     }
 
     @Test
