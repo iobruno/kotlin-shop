@@ -8,5 +8,4 @@ data class Account(val name: String, val email: String) {
         require(name.isNotEmpty()) { "Name cannot be blank" }
         require(emailRegex.matcher(email).matches()) { "Invalid email address" }
     }
-
 }

@@ -97,5 +97,4 @@ internal class AddressTest {
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("City cannot be empty")
     }
-
 }

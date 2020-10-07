@@ -19,5 +19,4 @@ data class CreditCard(val nameOnCard: String,
     override fun charge(amount: BigDecimal): Boolean {
         TODO("attempt transaction with payment broker")
     }
-
 }

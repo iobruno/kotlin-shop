@@ -1,17 +1,19 @@
 package io.petproject.model
 
+import java.math.BigDecimal
+
 data class Invoice(private val order: Order) {
 
-    val items = order.items
-    val subtotal = order.subtotal()
-    val otherCosts = order.feesAndDiscounts
-    val grandTotal = order.grandTotal()
-    val billingAddress = order.paymentMethod.billingAddress
-    val parcels by lazy {
-        if (order.type == OrderType.PHYSICAL) {
+    val items: List<Item> = order.items
+    val subtotal: BigDecimal = order.subtotal()
+    val otherCosts: Map<String, BigDecimal> = order.feesAndDiscounts
+    val grandTotal: BigDecimal = order.grandTotal()
+    val billingAddress: Address = order.paymentMethod.billingAddress
+
+    val parcels: List<Parcel> by lazy {
+        if (order.type == OrderType.PHYSICAL)
             (order as PhysicalOrder).parcels()
-        } else {
+        else
             listOf()
-        }
     }
 }

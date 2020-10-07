@@ -12,21 +12,20 @@ data class Parcel(val items: List<Item>,
     companion object {
 
         fun breakdown(items: List<Item>, shippingAddress: Address): List<Parcel> {
-            return items.asSequence()
-                    .groupBy { it.product.type }
-                    .map { (productType, items) ->
-                        when(productType) {
-                            PHYSICAL -> Parcel(items, shippingAddress, ShippingLabel.DEFAULT)
-                            PHYSICAL_TAX_FREE -> Parcel(items, shippingAddress, ShippingLabel.TAX_FREE)
-                            else -> throw IllegalStateException("Unmapped ProductType, no corresponding Shipping Label")
-                        }
-                    }
+            return items.groupBy { it.product.type }.map { (productType, items) ->
+                when (productType) {
+                    PHYSICAL -> Parcel(items, shippingAddress, ShippingLabel.DEFAULT)
+                    PHYSICAL_TAX_FREE -> Parcel(items, shippingAddress, ShippingLabel.TAX_FREE)
+                    else -> throw IllegalStateException("Unmapped ProductType, no corresponding Shipping Label")
+                }
+            }
         }
 
         fun shippingCostsOf(parcels: List<Parcel>): BigDecimal {
-            return parcels.map { it.shippingAndHandlingCosts() }
-                    .fold(BigDecimal.ZERO) { acc, value -> acc.plus(value) }
-                    .setScale(2, RoundingMode.HALF_UP)
+            return parcels
+                .map { it.shippingAndHandlingCosts() }
+                .fold(BigDecimal.ZERO) { acc, value -> acc.plus(value) }
+                .setScale(2, RoundingMode.HALF_UP)
         }
     }
 
