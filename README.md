@@ -10,7 +10,7 @@ I took inspiration based on my understanding of how Amazon handles Physical, Dig
 and Subscription Orders
 
 ## Tech Stack
-- Kotlin 1.3.+
+- Kotlin 1.4.+
 - Gradle
 
 ## Usage
@@ -34,9 +34,9 @@ fun main() {
     // Pick one or Iterate through the orders
     val physicalOrder = orders.first { it.type == OrderType.PHYSICAL } as PhysicalOrder
     val digitalOrder = orders.first { it.type == OrderType.DIGITAL } as DigitalOrder
-    val membershipOrder = orders.first { it.type == OrderType.SUBSCRIPTION } as SubscriptionOrder
+    val subscriptionOrder = orders.first { it.type == OrderType.SUBSCRIPTION } as SubscriptionOrder
 
-    val address = Address.Builder()
+    val address = Address.builder
         .country("Brazil")
         .city("Sao Paulo")
         .state("SP")
@@ -65,7 +65,7 @@ fun main() {
         .pay()
         .invoice()
 
-    val membershipOrderInvoice = membershipOrder
+    val membershipOrderInvoice = subscriptionOrder
         .withPaymentMethod(myCreditCard)
         .place()
         .pay()
@@ -168,9 +168,9 @@ and also to wrap all the complexity of creating an Order, this Shopping Cart ent
     - Overrides whatever amount there is of the given `product` wih the specified `n` amount. 
       If `(n == 0)`, the product is deleted from the cart
           
-  - `delete(product: Product)`: Deletes the product from the cart regardless of the quantity
+  - `delete(product: Product)` Deletes the product from the cart regardless of the quantity
 
-  - `subtotal()`: Computes the sum of (unittest price of each product in the Cart * quantity)
+  - `subtotal()` Computes the sum of (unittest price of each product in the Cart * quantity)
     
   - `checkout(account: Account)`: 
     - All items that fall under `Physical` (regardless if their product category will be tax-free on Shipment or not) 
