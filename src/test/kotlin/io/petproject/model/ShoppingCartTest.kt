@@ -17,8 +17,7 @@ internal class ShoppingCartTest {
         val spotify = Product("Spotify Premium", ProductType.SUBSCRIPTION, 14.90)
         val amazon = Product("Amazon Prime", ProductType.SUBSCRIPTION, 12.90)
         val book = Product("Cracking the Code Interview", ProductType.PHYSICAL_TAX_FREE, 219.57)
-        val anotherBook =
-            Product("The Hitchhiker's Guide to the Galaxy", ProductType.PHYSICAL_TAX_FREE, 120.00)
+        val anotherBook = Product("The Hitchhiker's Guide", ProductType.PHYSICAL_TAX_FREE, 120.00)
         val musicDigitalAlbum = Product("Stairway to Heaven", ProductType.DIGITAL, 5.00)
         val videoGameDigitalCopy = Product("Nier:Automata", ProductType.DIGITAL, 129.90)
 
@@ -95,13 +94,13 @@ internal class ShoppingCartTest {
 
     @Test
     fun `when computing Subtotal, sum the price of all items in the cart`() {
-        assertThat(shoppingCart.subtotal().toPlainString()).isEqualTo("3838.44")
+        assertThat(shoppingCart.subtotal.toPlainString()).isEqualTo("3838.44")
     }
 
     @Test
     fun `when computing Subtotal, return Zero if there's nothing in the cart`() {
         val anotherShoppingCart = ShoppingCart()
-        assertThat(anotherShoppingCart.subtotal().toPlainString()).isEqualTo("0.00")
+        assertThat(anotherShoppingCart.subtotal.toPlainString()).isEqualTo("0.00")
     }
 
     @Test
