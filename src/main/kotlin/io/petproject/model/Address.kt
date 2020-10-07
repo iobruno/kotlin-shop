@@ -6,6 +6,10 @@ data class Address(val country: String,
                    val city: String,
                    val state: String) {
 
+    companion object {
+        val builder = Builder()
+    }
+
     init {
         require(country.isNotEmpty()) { "Country cannot be empty" }
         require(streetAddress.isNotEmpty()) { "Street address cannot be empty" }
