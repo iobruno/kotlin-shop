@@ -1,166 +1,131 @@
 package io.petproject.model
 
+import java.time.YearMonth
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.YearMonth
 
 internal class DigitalOrderTest {
 
-    private lateinit var account: Account
-    private lateinit var paymentMethod: PaymentMethod
+    private val billingAddress by lazy {
+        Address.builder
+            .withCountry("Brazil")
+            .withCity("Sao Paulo")
+            .withState("SP")
+            .withZipCode("01000-000")
+            .withStreetAddress("Av Paulista, 1000")
+            .build()
+    }
+    private val paymentMethod: PaymentMethod by lazy {
+        CreditCard("JOHN DOE", "123.456.789-00", 123, YearMonth.of(2027, 11), billingAddress)
+    }
+    private val account by lazy { Account("John Doe", "john.doe@domain.suffix") }
+
     private lateinit var digitalItems: List<Item>
 
     @BeforeEach
     fun setup() {
-        val billingAddress = Address.Builder()
-                .country("Brazil")
-                .city("Sao Paulo")
-                .state("SP")
-                .zipCode("01000-000")
-                .streetAddress("Av Paulista, 1000")
-                .build()
-
-        paymentMethod = CreditCard(
-            "JOHN DOE",
-            "123.456.789-00", 123,
-            YearMonth.of(2027, 11),
-            billingAddress
-        )
-
-        account = Account("John Doe", "john.doe@domain.suffix")
-
         val musicDigitalAlbum = Product("Stairway to Heaven", ProductType.DIGITAL, 5.00)
         val videoGameDigitalCopy = Product("Nier:Automata", ProductType.DIGITAL, 129.90)
-
-        digitalItems = listOf(
-            Item(musicDigitalAlbum, 1),
-            Item(videoGameDigitalCopy, 4)
-        )
+        digitalItems = listOf(Item(musicDigitalAlbum, 1), Item(videoGameDigitalCopy, 4))
     }
 
     @Test
     fun `when creating a Digital Order, there must be only Digital items in the list`() {
-        val ex = assertThrows(IllegalArgumentException::class.java) {
-            val product = Product("physical product", ProductType.PHYSICAL, 1.99)
-            DigitalOrder(listOf(Item(product, 1)), account)
-        }
-        assertThat(ex.message).isEqualTo("A Digital Order may only contain Digital items")
+        val product = Product("physical product", ProductType.PHYSICAL, 1.99)
+        assertThatThrownBy { DigitalOrder(listOf(Item(product, 1)), account) }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("A Digital Order may only contain Digital items")
     }
 
     @Test
     fun `when placing a DigitalOrder, there must be at least one item in the list`() {
-        val ex = assertThrows(IllegalArgumentException::class.java) {
-            DigitalOrder(listOf(), account)
-                    .withPaymentMethod(paymentMethod)
-                    .place()
-        }
-        assertThat(ex.message).isEqualTo("There must be at least one item to place the Order")
+        val order = DigitalOrder(listOf(), account).withPaymentMethod(paymentMethod)
+        assertThatThrownBy { order.place() }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("There must be at least one item to place the Order")
     }
 
     @Test
     fun `when placing a DigitalOrder, a paymentMethod must be informed`() {
-        val ex = assertThrows(IllegalArgumentException::class.java) {
-            val digitalOrder = DigitalOrder(digitalItems, account)
-            digitalOrder.place()
-        }
-        assertThat(ex.message).isEqualTo("A Payment method must be informed to place the Order")
+        val order = DigitalOrder(digitalItems, account)
+        assertThatThrownBy { order.place() }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("A Payment method must be informed to place the Order")
     }
 
     @Test
     fun `when placing a Digital Order, subtotal should compute overall sum of all Item prices`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
-        assertThat(digitalOrder.subtotal().toPlainString()).isEqualTo("524.60")
+        val order = DigitalOrder(digitalItems, account)
+        order.withPaymentMethod(paymentMethod).place()
+        assertThat(order.subtotal().toPlainString()).isEqualTo("524.60")
     }
 
     @Test
     fun `when placing a Digital Order, total should compute subtotal plus discounts for Digital Items`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
-        assertThat(digitalOrder.grandTotal().toPlainString()).isEqualTo("514.60")
+        val order = DigitalOrder(digitalItems, account)
+        order.withPaymentMethod(paymentMethod).place()
+        assertThat(order.grandTotal().toPlainString()).isEqualTo("514.60")
     }
 
     @Test
     fun `when paying for a Digital Order, throw IllegalStateEx if Status is not PENDING`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-
-        val ex = assertThrows(IllegalStateException::class.java) {
-            digitalOrder.pay()
-        }
-        assertThat(ex.message).isEqualTo("Order must be placed before it can be payed")
+        val order = DigitalOrder(digitalItems, account).withPaymentMethod(paymentMethod)
+        assertThatThrownBy { order.pay() }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("Order must be placed before it can be payed")
     }
 
     @Test
     fun `when paying for a Digital Order, Status should be updated to UNSENT once pay is successful`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
-                .pay()
-        assertThat(digitalOrder.status).isEqualTo(OrderStatus.UNSENT)
+        val order = DigitalOrder(digitalItems, account)
+        order.withPaymentMethod(paymentMethod).place().pay()
+        assertThat(order.status).isEqualTo(OrderStatus.UNSENT)
     }
 
     @Test
     fun `when paying for a Digital Order that was already payed, throw IllegalStateEx`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
-                .pay()
+        val order =
+            DigitalOrder(digitalItems, account).withPaymentMethod(paymentMethod).place().pay()
 
-        val ex = assertThrows(IllegalStateException::class.java) {
-            digitalOrder.pay()
-        }
-        assertThat(ex.message).isEqualTo("Order Payment has been processed already")
+        assertThatThrownBy { order.pay() }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("Order Payment has been processed already")
     }
 
     @Test
     fun `when fulfilling a Digital Order, throw IllegalStateEx if Status is not PAYMENT_COMPLETE`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
+        val order = DigitalOrder(digitalItems, account)
+        order.withPaymentMethod(paymentMethod).place()
 
-        val ex = assertThrows(IllegalStateException::class.java) {
-            digitalOrder.fulfill()
-        }
-        assertThat(ex.message).isEqualTo("Order must be placed and payed before it can be fulfilled")
+        assertThatThrownBy { order.fulfill() }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("Order must be placed and payed before it can be fulfilled")
     }
 
     @Test
     fun `when fulfilling a Digital Order, Status should be updated to SENT`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
-                .pay()
-                .fulfill()
-        assertThat(digitalOrder.status).isEqualTo(OrderStatus.SENT)
+        val order = DigitalOrder(digitalItems, account)
+        order.withPaymentMethod(paymentMethod).place().pay().fulfill()
+        assertThat(order.status).isEqualTo(OrderStatus.SENT)
     }
 
     @Test
     fun `when completing a Digital Order, throw IllegalStateEx if Status is not UNSENT`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
-                .pay()
+        val order =
+            DigitalOrder(digitalItems, account).withPaymentMethod(paymentMethod).place().pay()
 
-        val ex = assertThrows(IllegalStateException::class.java) {
-            digitalOrder.complete()
-        }
-        assertThat(ex.message).isEqualTo("Order must have been shipped/sent and confirmed, before it can be completed")
+        assertThatThrownBy { order.complete() }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage(
+                "Order must have been shipped/sent and confirmed, before it can be completed")
     }
 
     @Test
     fun `when completing a Digital Order, Status should be updated to REDEEMED`() {
-        val digitalOrder = DigitalOrder(digitalItems, account)
-                .withPaymentMethod(paymentMethod)
-                .place()
-                .pay()
-                .fulfill()
-                .complete()
-        assertThat(digitalOrder.status).isEqualTo(OrderStatus.REDEEMED)
+        val order = DigitalOrder(digitalItems, account)
+        order.withPaymentMethod(paymentMethod).place().pay().fulfill().complete()
+        assertThat(order.status).isEqualTo(OrderStatus.REDEEMED)
     }
-
 }
