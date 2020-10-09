@@ -16,7 +16,7 @@ data class Parcel(val items: List<Item>,
                 when (productType) {
                     PHYSICAL -> Parcel(items, shippingAddress, ShippingLabel.DEFAULT)
                     PHYSICAL_TAX_FREE -> Parcel(items, shippingAddress, ShippingLabel.TAX_FREE)
-                    else -> throw IllegalStateException("Unmapped ProductType, no corresponding Shipping Label")
+                    DIGITAL, SUBSCRIPTION -> throw IllegalStateException("Unmapped ProductType, no corresponding Shipping Label")
                 }
             }
         }

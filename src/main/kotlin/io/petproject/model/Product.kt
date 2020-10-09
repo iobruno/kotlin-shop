@@ -1,6 +1,5 @@
 package io.petproject.model
 
-import java.lang.ClassCastException
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -14,11 +13,9 @@ data class Product(val name: String, val type: ProductType, private val _price: 
     }
 
     override fun equals(other: Any?): Boolean =
-        try {
-            val that = other as Product
-            (this.name == that.name) && (this.type == that.type)
-        } catch (ex: ClassCastException) {
-            false
+        when (other) {
+            is Product -> (this.name == other.name) && (this.type == other.type)
+            else -> false
         }
 
     override fun hashCode(): Int {
@@ -28,9 +25,9 @@ data class Product(val name: String, val type: ProductType, private val _price: 
     }
 }
 
-enum class ProductType {
-    PHYSICAL,
-    PHYSICAL_TAX_FREE,
-    DIGITAL,
-    SUBSCRIPTION
+enum class ProductType(val id: Int) {
+    PHYSICAL(100),
+    PHYSICAL_TAX_FREE(100),
+    DIGITAL(200),
+    SUBSCRIPTION(300);
 }
