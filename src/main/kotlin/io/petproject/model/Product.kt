@@ -25,9 +25,9 @@ data class Product(val name: String, val type: ProductType, private val _price: 
     }
 }
 
-enum class ProductType(val id: Int) {
-    PHYSICAL(100),
-    PHYSICAL_TAX_FREE(100),
-    DIGITAL(200),
-    SUBSCRIPTION(300);
+enum class ProductType {
+    PHYSICAL,
+    PHYSICAL_TAX_FREE,
+    DIGITAL,
+    SUBSCRIPTION
 }
