@@ -11,9 +11,9 @@ data class Invoice(private val order: Order) {
     val billingAddress: Address = order.paymentMethod.billingAddress
 
     val parcels: List<Parcel> by lazy {
-        if (order.type == OrderType.PHYSICAL)
-            (order as PhysicalOrder).parcels()
-        else
-            listOf()
+        when(order) {
+            is PhysicalOrder -> order.parcels()
+            else -> listOf()
+        }
     }
 }
