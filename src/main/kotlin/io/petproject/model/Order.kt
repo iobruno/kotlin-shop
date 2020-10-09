@@ -30,12 +30,12 @@ interface Order {
         return subtotal().plus(feesAndDiscounts())
     }
 
-    fun withPaymentMethod(paymentMethod: PaymentMethod) = apply { this.paymentMethod = paymentMethod }
+    fun withPaymentMethod(paymentMethod: PaymentMethod) = apply {
+        this.paymentMethod = paymentMethod
+    }
 
     fun place() = apply {
-        require(items.isNotEmpty()) {
-            "There must be at least one item to place the Order"
-        }
+        require(items.isNotEmpty()) { "There must be at least one item to place the Order" }
     }
 
     fun pay() = apply {
@@ -84,21 +84,26 @@ data class PhysicalOrder(override val items: List<Item>, override val account: A
 
     init {
         require(items.count {
-                it.product.type != ProductType.PHYSICAL &&
-                it.product.type != ProductType.PHYSICAL_TAX_FREE } == 0) {
-            "A Physical Order may only contain Physical items"
-        }
+            it.product.type != ProductType.PHYSICAL &&
+            it.product.type != ProductType.PHYSICAL_TAX_FREE
+        } == 0) { "A Physical Order may only contain Physical items" }
     }
 
-    fun withShippingAddress(address: Address) = apply { this.shippingAddress = address }
+    fun withShippingAddress(address: Address) = apply {
+        this.shippingAddress = address
+    }
 
     override fun withPaymentMethod(paymentMethod: PaymentMethod) = apply {
         super.withPaymentMethod(paymentMethod)
     }
 
     override fun place() = apply {
-        require(this::shippingAddress.isInitialized) { "Shipping Address must be informed for Orders with physical delivery" }
-        require(this::paymentMethod.isInitialized) { "A Payment method must be informed to place the Order" }
+        require(this::shippingAddress.isInitialized) {
+            "Shipping Address must be informed for Orders with physical delivery"
+        }
+        require(this::paymentMethod.isInitialized) {
+            "A Payment method must be informed to place the Order"
+        }
         super.place()
         this.feesAndDiscounts["shippingAndHandling"] = Parcel.shippingCostsOf(parcels())
         this.status = OrderStatus.PENDING
@@ -198,7 +203,9 @@ data class SubscriptionOrder(override val items: List<Item>,
     }
 
     override fun pay() = apply {
-        check(this::status.isInitialized) { "Order must be placed before it can be payed" }
+        check(this::status.isInitialized) {
+            "Order must be placed before it can be payed"
+        }
         super.pay()
         this.status = OrderStatus.PENDING_ACTIVATION
     }
@@ -208,7 +215,7 @@ data class SubscriptionOrder(override val items: List<Item>,
         this.status = OrderStatus.ACTIVATED
     }
 
-    override fun complete() = apply { }
+    override fun complete() = apply {}
 }
 
 enum class OrderType {
