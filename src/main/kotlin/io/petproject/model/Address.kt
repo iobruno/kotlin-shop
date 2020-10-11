@@ -1,10 +1,12 @@
 package io.petproject.model
 
-data class Address(val country: String,
-                   val streetAddress: String,
-                   val zipCode: String,
-                   val city: String,
-                   val state: String) {
+data class Address(
+    val country: String,
+    val streetAddress: String,
+    val zipCode: String,
+    val city: String,
+    val state: String
+) {
 
     companion object {
         val builder = Builder()
@@ -25,16 +27,26 @@ data class Address(val country: String,
         private lateinit var city: String
         private lateinit var state: String
 
-        fun withCountry(country: String) = apply { this.country = country.trim() }
+        fun withCountry(country: String) = apply {
+            this.country = country.trim()
+        }
 
-        fun withStreetAddress(streetAddress: String) = apply { this.streetAddress = streetAddress.trim() }
+        fun withStreetAddress(streetAddress: String): Builder = apply {
+            this.streetAddress = streetAddress.trim()
+        }
 
-        fun withZipCode(zipCode: String) = apply { this.zipCode = zipCode.trim() }
+        fun withZipCode(zipCode: String) = apply {
+            this.zipCode = zipCode.trim()
+        }
 
-        fun withCity(city: String) = apply { this.city = city.trim() }
+        fun withCity(city: String) = apply {
+            this.city = city.trim()
+        }
 
-        fun withState(state: String) = apply { this.state = state.trim() }
+        fun withState(state: String) = apply {
+            this.state = state.trim()
+        }
 
-        fun build(): Address = Address(country, streetAddress, zipCode, city, state)
+        fun build() = Address(country, streetAddress, zipCode, city, state)
     }
 }
