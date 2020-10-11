@@ -181,7 +181,7 @@ and also to wrap all the complexity of creating an Order, this Shopping Cart ent
 
 ## TODO
 
-- [x] Automated builds with CI 
+- [x] Build Automation with CI (Travis CI)
 - [x] Code Coverage check
 - [x] Code Inspection for maintainability
-- [ ] Ship with GraalVM
+- [ ] GitHub CI
