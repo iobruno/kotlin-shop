@@ -91,11 +91,10 @@ data class PhysicalOrder(override val items: List<Item>, override val account: A
     val parcels: () -> List<Parcel> = { Parcel.breakdown(items, shippingAddress) }
 
     init {
-        require(items.any {
-            it.product.type != PHYSICAL && it.product.type != PHYSICAL_TAX_FREE
-        }) { "A Physical Order may only contain Physical items" }
+        require(items.none { it.product.type != PHYSICAL && it.product.type != PHYSICAL_TAX_FREE }) {
+            "A Physical Order may only contain Physical items"
+        }
     }
-
     fun withShippingAddress(address: Address) = apply { this.shippingAddress = address }
 
     override fun withPaymentMethod(paymentMethod: PaymentMethod) = apply {
@@ -140,7 +139,7 @@ data class DigitalOrder(override val items: List<Item>, override val account: Ac
     override val type = OrderType.DIGITAL
 
     init {
-        require(items.any { it.product.type != DIGITAL }) {
+        require(items.none { it.product.type != DIGITAL }) {
             "A Digital Order may only contain Digital items"
         }
     }
@@ -187,7 +186,7 @@ data class SubscriptionOrder(override val items: List<Item>,
     override val type = OrderType.SUBSCRIPTION
 
     init {
-        require(items.any { it.product.type != SUBSCRIPTION }) {
+        require(items.none() { it.product.type != SUBSCRIPTION }) {
             "A Membership Order may only contain Membership items"
         }
         require(items.count() == 1) {
