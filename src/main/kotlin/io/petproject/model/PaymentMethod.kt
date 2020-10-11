@@ -10,11 +10,13 @@ interface PaymentMethod {
     fun charge(amount: BigDecimal): Boolean
 }
 
-data class CreditCard(val nameOnCard: String,
-                      val number: String,
-                      val securityCode: Int,
-                      val expiresAt: YearMonth,
-                      override val billingAddress: Address) : PaymentMethod {
+data class CreditCard(
+    val nameOnCard: String,
+    val number: String,
+    val securityCode: Int,
+    val expiresAt: YearMonth,
+    override val billingAddress: Address
+) : PaymentMethod {
 
     override fun charge(amount: BigDecimal): Boolean {
         TODO("attempt transaction with payment broker")

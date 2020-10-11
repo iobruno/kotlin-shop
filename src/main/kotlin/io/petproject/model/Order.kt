@@ -1,5 +1,9 @@
 package io.petproject.model
 
+import io.petproject.model.ProductType.DIGITAL
+import io.petproject.model.ProductType.PHYSICAL
+import io.petproject.model.ProductType.PHYSICAL_TAX_FREE
+import io.petproject.model.ProductType.SUBSCRIPTION
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -35,7 +39,9 @@ interface Order {
     }
 
     fun place() = apply {
-        require(items.isNotEmpty()) { "There must be at least one item to place the Order" }
+        require(items.isNotEmpty()) {
+            "There must be at least one item to place the Order"
+        }
     }
 
     fun pay() = apply {
@@ -67,7 +73,9 @@ interface Order {
         check(status.code >= OrderStatus.SHIPPED.code) {
             "Order must have been shipped/sent and confirmed, before it can be completed"
         }
-        check(status.code < OrderStatus.DELIVERED.code) { "Order has been delivered already" }
+        check(status.code < OrderStatus.DELIVERED.code) {
+            "Order has been delivered already"
+        }
     }
 }
 
@@ -83,15 +91,12 @@ data class PhysicalOrder(override val items: List<Item>, override val account: A
     val parcels: () -> List<Parcel> = { Parcel.breakdown(items, shippingAddress) }
 
     init {
-        require(items.count {
-            it.product.type != ProductType.PHYSICAL &&
-            it.product.type != ProductType.PHYSICAL_TAX_FREE
-        } == 0) { "A Physical Order may only contain Physical items" }
+        require(items.any {
+            it.product.type != PHYSICAL && it.product.type != PHYSICAL_TAX_FREE
+        }) { "A Physical Order may only contain Physical items" }
     }
 
-    fun withShippingAddress(address: Address) = apply {
-        this.shippingAddress = address
-    }
+    fun withShippingAddress(address: Address) = apply { this.shippingAddress = address }
 
     override fun withPaymentMethod(paymentMethod: PaymentMethod) = apply {
         super.withPaymentMethod(paymentMethod)
@@ -135,7 +140,7 @@ data class DigitalOrder(override val items: List<Item>, override val account: Ac
     override val type = OrderType.DIGITAL
 
     init {
-        require(items.count { it.product.type != ProductType.DIGITAL } == 0) {
+        require(items.any { it.product.type != DIGITAL }) {
             "A Digital Order may only contain Digital items"
         }
     }
@@ -182,7 +187,7 @@ data class SubscriptionOrder(override val items: List<Item>,
     override val type = OrderType.SUBSCRIPTION
 
     init {
-        require(items.count { it.product.type != ProductType.SUBSCRIPTION } == 0) {
+        require(items.any { it.product.type != SUBSCRIPTION }) {
             "A Membership Order may only contain Membership items"
         }
         require(items.count() == 1) {

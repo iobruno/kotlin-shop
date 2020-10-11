@@ -2,7 +2,6 @@ package io.petproject.model
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -64,10 +63,12 @@ internal class ShoppingCartTest {
     @Test
     fun `when updating Quantity of a Product to lowerThan Zero, it should throw IllegalArgEx`() {
         val videoGameDigitalCopy = Product("Nier:Automata", ProductType.DIGITAL, 129.90)
+
         assertThatThrownBy { shoppingCart.updateQuantity(videoGameDigitalCopy, -1) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("Quantity must be equalTo or greaterThan 0")
     }
+
     @Test
     fun `when updating Quantity of a Product that is not in the cart, throw IllegalArgEx`() {
         val someProductNotInTheCart = Product("lorem ipsum", ProductType.PHYSICAL, 19.90)
@@ -87,6 +88,7 @@ internal class ShoppingCartTest {
     @Test
     fun `when deleting a Product that is NOT in the cart, it should vanish`() {
         val someProductNotInTheCart = Product("lorem ipsum", ProductType.PHYSICAL, 19.90)
+
         assertThatThrownBy { shoppingCart.delete(someProductNotInTheCart) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("Product specified is not in the Cart")

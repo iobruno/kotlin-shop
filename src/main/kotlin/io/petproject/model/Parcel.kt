@@ -1,13 +1,17 @@
 package io.petproject.model
 
-import io.petproject.model.ProductType.*
-import java.lang.IllegalStateException
+import io.petproject.model.ProductType.DIGITAL
+import io.petproject.model.ProductType.PHYSICAL
+import io.petproject.model.ProductType.PHYSICAL_TAX_FREE
+import io.petproject.model.ProductType.SUBSCRIPTION
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-data class Parcel(val items: List<Item>,
-                  val shippingAddress: Address,
-                  val shippingLabel: ShippingLabel) {
+data class Parcel(
+    val items: List<Item>,
+    val shippingAddress: Address,
+    val shippingLabel: ShippingLabel
+) {
 
     companion object {
 
@@ -30,7 +34,7 @@ data class Parcel(val items: List<Item>,
     }
 
     fun shippingAndHandlingCosts(): BigDecimal {
-        //TODO("compute logistics costs based on size, weight and shippingAddress")
+        // TODO("compute logistics costs based on size, weight and shippingAddress")
         return BigDecimal.TEN
     }
 }
