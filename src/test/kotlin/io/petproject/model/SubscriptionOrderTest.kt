@@ -54,12 +54,8 @@ internal class SubscriptionOrderTest {
     }
 
     @Test
-    fun `when placing a Subscription, there must be exactly one item in the list`() {
-        val order: SubscriptionOrder =
-            SubscriptionOrder(subscriptions, account)
-                .withPaymentMethod(paymentMethod)
-
-        assertThatThrownBy { order.place() }
+    fun `when creating a Subscription Order, there must be exactly one item in the list`() {
+        assertThatThrownBy { SubscriptionOrder(subscriptions, account) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("A Membership Order may only contain one Membership subscription")
     }
