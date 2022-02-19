@@ -51,15 +51,3 @@ tasks.jacocoTestCoverageVerification {
         }
     )
 }
-
-val codeCoverage by tasks.registering {
-    group = "verification"
-    description = "Gradle tests with Code Coverage"
-    dependsOn(tasks.test, tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
-
-    tasks.findByName("jacocoTestReport")
-        ?.mustRunAfter(tasks.findByName("test"))
-
-    tasks.findByName("jacocoTestCoverageVerification")
-        ?.mustRunAfter(tasks.findByName("jacocoTestReport"))
-}
