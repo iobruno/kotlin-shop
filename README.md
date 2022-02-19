@@ -1,6 +1,6 @@
 # Kotlin Shop
-[![Travis CI](https://travis-ci.org/iobruno/kotlin-shop.svg?branch=master)](https://travis-ci.org/iobruno/kotlin-shop)
-[![codecov](https://codecov.io/gh/iobruno/kotlin-shop/branch/master/graph/badge.svg)](https://codecov.io/gh/iobruno/kotlin-shop)
+![GitHub Actions](https://github.com/iobruno/kotlin-shop/actions/workflows/kotlin-shop-ci.yml/badge.svg?branch-master&event=push)
+[![codecov](https://codecov.io/gh/iobruno/kotlin-shop/branch/master/graph/badge.svg?token=MYqE0qrhbs)](https://codecov.io/gh/iobruno/kotlin-shop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3203ff55a8ce4d832e8d/maintainability)](https://codeclimate.com/github/iobruno/kotlin-shop/maintainability)
 
 This is just a pet project of mine to play with Kotlin stdlib
@@ -10,8 +10,9 @@ I took inspiration based on my understanding of how Amazon handles Physical, Dig
 and Subscription Orders
 
 ## Tech Stack
-- Kotlin 1.4.+
+- Kotlin 1.6 (target: JVM 17)
 - Gradle
+- GitHub Actions (CI)
 
 ## Usage
 ```kotlin
