@@ -5,10 +5,16 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: JDK Setup and Build
+      - name: JDK Setup
         uses: actions/setup-java@v2.5.0
         with:
           distribution: 'liberica'
           java-version: '17'
           cache: 'gradle'
-      - run: ./gradlew clean build test
+      - name: App Test and Build
+        run: ./gradlew clean build test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./build/reports/
+          verbose: true
