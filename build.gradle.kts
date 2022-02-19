@@ -31,32 +31,35 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
 tasks.jacocoTestReport {
+    dependsOn(tasks.test)
     reports {
-        csv.isEnabled = false
-        html.isEnabled = false
-        xml.isEnabled = true
-        xml.destination = File("$buildDir/reports/jacoco/report.xml")
+        xml.required.set(false)
+        csv.required.set(false)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
 }
 
 tasks.jacocoTestCoverageVerification {
     classDirectories.setFrom(
-            sourceSets.main.get().output.asFileTree.matching {
-                exclude("io/petproject/utils/*.class")
-            }
+        sourceSets.main.get().output.asFileTree.matching {
+            exclude("io/petproject/utils/*.class")
+        }
     )
 }
 
 val codeCoverage by tasks.registering {
     group = "verification"
     description = "Gradle tests with Code Coverage"
-
     dependsOn(tasks.test, tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
 
     tasks.findByName("jacocoTestReport")
-            ?.mustRunAfter(tasks.findByName("test"))
+        ?.mustRunAfter(tasks.findByName("test"))
 
     tasks.findByName("jacocoTestCoverageVerification")
-            ?.mustRunAfter(tasks.findByName("jacocoTestReport"))
+        ?.mustRunAfter(tasks.findByName("jacocoTestReport"))
 }
