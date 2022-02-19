@@ -1,0 +1,14 @@
+name: kotlin-shop-ci
+on: [push]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: JDK Setup and Build
+        uses: actions/setup-java@v2.5.0
+        with:
+          distribution: 'liberica'
+          java-version: '17'
+          cache: 'gradle'
+      - run: ./gradlew clean build test
