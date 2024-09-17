@@ -1,12 +1,14 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.internal.jvm.Jvm
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "2.0.20"
     jacoco
 }
 
 group = "io.petproject"
-version = "1.0-SNAPSHOT"
+version = "2.0-SNAPSHOT"
 
 repositories {
     mavenLocal()
@@ -14,16 +16,18 @@ repositories {
 }
 
 dependencies {
-    val junitVersion = "5.8.2"
-    val assertJVersion = "3.22.0"
+    val junitVersion = "5.11.0"
+    val kotestVersion = "5.9.1"
     implementation(kotlin("stdlib"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-    testImplementation("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "17"
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
     }
 }
 

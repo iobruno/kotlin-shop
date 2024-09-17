@@ -20,7 +20,7 @@ class ShoppingCart {
 
     fun add(product: Product, quantity: Int) = apply {
         items.compute(product) { _, item ->
-            item?.addMore(quantity) ?: Item(product, quantity)
+            item?.updateBy(quantity) ?: Item(product, quantity)
         }
     }
 
@@ -43,17 +43,14 @@ class ShoppingCart {
     }
 
     fun checkout(account: Account): List<Order> =
-        items.values
-            .groupBy {
-                val productType = it.product.type
-                if (productType == PHYSICAL_TAX_FREE) PHYSICAL else productType
+        items.values.groupBy {
+            val productType = it.product.type
+            if (productType == PHYSICAL_TAX_FREE) PHYSICAL else productType
+        }.map { (type, items) ->
+            when (type) {
+                PHYSICAL, PHYSICAL_TAX_FREE -> listOf(PhysicalOrder(items, account))
+                DIGITAL -> listOf(DigitalOrder(items, account))
+                SUBSCRIPTION -> items.map { SubscriptionOrder(it, account) }
             }
-            .map { (type, items) ->
-                when (type) {
-                    PHYSICAL, PHYSICAL_TAX_FREE -> listOf(PhysicalOrder(items, account))
-                    DIGITAL -> listOf(DigitalOrder(items, account))
-                    SUBSCRIPTION -> items.map { SubscriptionOrder(it, account) }
-                }
-            }
-            .flatten()
+        }.flatten()
 }
