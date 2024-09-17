@@ -1,7 +1,7 @@
 package io.petproject.model
 
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 internal class AddressTest {
@@ -16,16 +16,16 @@ internal class AddressTest {
             .withCity(" Sao Paulo ")
             .build()
 
-        assertThat(address.city).isEqualTo("Sao Paulo")
-        assertThat(address.state).isEqualTo("SP")
-        assertThat(address.country).isEqualTo("Brazil")
-        assertThat(address.streetAddress).isEqualTo("Av Paulista, 1000")
-        assertThat(address.zipCode).isEqualTo("01000-000")
+        address.city shouldBe "Sao Paulo"
+        address.state shouldBe "SP"
+        address.country shouldBe "Brazil"
+        address.streetAddress shouldBe "Av Paulista, 1000"
+        address.zipCode shouldBe "01000-000"
     }
 
     @Test
     fun `when country is blank, throw IllegalArgEx`() {
-        assertThatThrownBy {
+        shouldThrowExactly<IllegalArgumentException> {
             Address.builder
                 .withCountry("")
                 .withStreetAddress("Av Paulista, 1000 ")
@@ -33,14 +33,12 @@ internal class AddressTest {
                 .withState("SP ")
                 .withCity(" Sao Paulo ")
                 .build()
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("Country cannot be empty")
+        }.message shouldBe "Country cannot be empty"
     }
 
     @Test
     fun `when streetName is blank, throw IllegalArgEx`() {
-        assertThatThrownBy {
+        shouldThrowExactly<IllegalArgumentException> {
             Address.builder
                 .withCountry("Brazil ")
                 .withStreetAddress("")
@@ -48,14 +46,12 @@ internal class AddressTest {
                 .withState("SP ")
                 .withCity(" Sao Paulo ")
                 .build()
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("Street address cannot be empty")
+        }.message shouldBe "Street address cannot be empty"
     }
 
     @Test
     fun `when postalCode is blank, throw IllegalArgEx`() {
-        assertThatThrownBy {
+        shouldThrowExactly<IllegalArgumentException> {
             Address.builder
                 .withCountry("Brazil ")
                 .withStreetAddress("Av Paulista, 1000 ")
@@ -63,14 +59,12 @@ internal class AddressTest {
                 .withState("SP ")
                 .withCity(" Sao Paulo ")
                 .build()
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("Postal code cannot be empty")
+        }.message shouldBe "Postal code cannot be empty"
     }
 
     @Test
     fun `when state is blank, throw IllegalArgEx`() {
-        assertThatThrownBy {
+        shouldThrowExactly<IllegalArgumentException> {
             Address.builder
                 .withCountry("Brazil ")
                 .withStreetAddress("Av Paulista, 1000 ")
@@ -78,14 +72,12 @@ internal class AddressTest {
                 .withState("")
                 .withCity(" Sao Paulo ")
                 .build()
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("State cannot be empty")
+        }.message shouldBe "State cannot be empty"
     }
 
     @Test
     fun `when city is blank, throw IllegalArgEx`() {
-        assertThatThrownBy {
+        shouldThrowExactly<IllegalArgumentException> {
             Address.builder
                 .withCountry("Brazil ")
                 .withStreetAddress("Av Paulista, 1000 ")
@@ -93,8 +85,6 @@ internal class AddressTest {
                 .withCity("")
                 .withState("SP ")
                 .build()
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("City cannot be empty")
+        }.message shouldBe "City cannot be empty"
     }
 }
