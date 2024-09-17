@@ -17,6 +17,7 @@ dependencies {
     val junitVersion = "5.11.0"
     val kotestVersion = "5.9.1"
     implementation(kotlin("stdlib"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
