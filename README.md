@@ -16,7 +16,7 @@ and Subscription Orders
 - [Kotlin 2.x](https://github.com/JetBrains/kotlin/releases/tag/v2.0.20) (target: JVM 21)
 - [Kotest](https://kotest.io/) (assertion framework)
 - [JUnit 5](https://junit.org/junit5/) (test runner)
-
+- [GitHub CI](https://docs.github.com/en/actions)
 
 ## Usage
 ```kotlin
@@ -185,8 +185,7 @@ and also to wrap all the complexity of creating an Order, this Shopping Cart ent
     (due to the complexity of activating each subscription individually, and probably through 3rd-party APIs) 
 
 ## TODO
-
 - [x] Build Automation with CI (Travis CI)
 - [x] Code Coverage check
 - [x] Code Inspection for maintainability
-- [ ] GitHub CI
+- [x] GitHub CI
