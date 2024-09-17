@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "2.0.20"
     jacoco
 }
 
@@ -14,16 +14,16 @@ repositories {
 }
 
 dependencies {
-    val junitVersion = "5.8.2"
-    val assertJVersion = "3.22.0"
+    val junitVersion = "5.11.0"
+    val kotestVersion = "5.9.1"
     implementation(kotlin("stdlib"))
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-    testImplementation("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 

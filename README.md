@@ -10,8 +10,8 @@ I took inspiration based on my understanding of how Amazon handles Physical, Dig
 and Subscription Orders
 
 ## Tech Stack
-- Kotlin 1.6 (target: JVM 17)
-- Gradle
+- Kotlin 2.0.20 (target: JVM 17)
+- Gradle 8.10
 - GitHub Actions (CI)
 
 ## Usage
