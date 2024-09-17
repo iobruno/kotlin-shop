@@ -6,8 +6,6 @@ import io.petproject.model.OrderStatus.ACTIVATED
 import io.petproject.model.OrderStatus.PENDING_ACTIVATION
 import io.petproject.model.ProductType.PHYSICAL
 import io.petproject.model.ProductType.SUBSCRIPTION
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.YearMonth
