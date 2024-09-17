@@ -10,13 +10,12 @@ data class Item(val product: Product, var quantity: Int) {
         require(quantity > 0) { "Quantity must be greaterThan 0" }
     }
 
-    fun addMore(quantity: Int) = apply {
-        require(quantity > 0) { "Quantity must be greaterThan 0" }
-        this.quantity += quantity
+    fun updateBy(quantity: Int) = apply {
+        updateTo(this.quantity+quantity)
     }
 
     fun updateTo(quantity: Int) = apply {
-        require(quantity >= 0) { "Quantity must be equalTo or greaterThan 0" }
+        require(quantity >= 0) { "Quantity must be greaterThan 0" }
         this.quantity = quantity
     }
 }
