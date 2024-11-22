@@ -1,11 +1,11 @@
 package io.petproject.model
 
 import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
-internal class ShoppingCartTest {
+
+internal class ShoppingCartTest : AnnotationSpec() {
     private val shoppingCart = ShoppingCart()
 
     @BeforeEach
@@ -30,6 +30,13 @@ internal class ShoppingCartTest {
             .add(spotify, 1)
             .add(amazon, 1)
     }
+
+    @AfterEach
+    fun clear() {
+        shoppingCart.items.clear()
+    }
+
+
 
     @Test
     fun `when adding a Product with quantity lowerThan or equalTo 0, throw IllegalArgEx`() {

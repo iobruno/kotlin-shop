@@ -1,10 +1,11 @@
 package io.petproject.model
 
 import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
 
-internal class AddressTest {
+
+internal class AddressTest : AnnotationSpec() {
 
     @Test
     fun `should build a valid address`() {

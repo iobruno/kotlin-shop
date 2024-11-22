@@ -1,13 +1,12 @@
 package io.petproject.model
 
 import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.petproject.model.ProductType.DIGITAL
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import java.time.YearMonth
 
-internal class DigitalOrderTest {
+internal class DigitalOrderTest : AnnotationSpec() {
 
     private val billingAddress: Address by lazy {
         Address.builder
