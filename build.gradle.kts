@@ -1,4 +1,3 @@
-import org.gradle.internal.jvm.Jvm
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
@@ -16,11 +15,9 @@ repositories {
 }
 
 dependencies {
-    val junitVersion = "5.11.0"
-    val kotestVersion = "5.9.1"
+    val kotestVersion: String by project
     implementation(kotlin("stdlib"))
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
 
@@ -31,7 +28,7 @@ tasks.withType<KotlinJvmCompile>().configureEach {
     }
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 

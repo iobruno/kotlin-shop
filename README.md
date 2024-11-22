@@ -1,7 +1,7 @@
 # Kotlin Shop
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.0-603DC0.svg?style=flat&logo=kotlin&logoColor=white&labelColor=603DC0)
 ![JDK](https://img.shields.io/badge/JDK-21-3F90BD.svg?style=flat&logo=openjdk&logoColor=white&labelColor=3F90BD)
-![Gradle](https://img.shields.io/badge/gradle-8.10-02303A?style=flat&logo=gradle&logoColor=white&labelColor=02303A)
+![Gradle](https://img.shields.io/badge/gradle-8.x-02303A?style=flat&logo=gradle&logoColor=white&labelColor=02303A)
 ![GitHub Actions](https://github.com/iobruno/kotlin-shop/actions/workflows/kotlin-shop-ci.yml/badge.svg?branch-master&event=push)
 [![codecov](https://codecov.io/gh/iobruno/kotlin-shop/branch/master/graph/badge.svg?token=MYqE0qrhbs)](https://codecov.io/gh/iobruno/kotlin-shop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3203ff55a8ce4d832e8d/maintainability)](https://codeclimate.com/github/iobruno/kotlin-shop/maintainability)
@@ -14,8 +14,8 @@ and Subscription Orders
 
 ## Tech Stack
 - [Kotlin 2.x](https://github.com/JetBrains/kotlin/releases/tag/v2.0.20) (target: JVM 21)
-- [Kotest](https://kotest.io/) (assertion framework)
 - [JUnit 5](https://junit.org/junit5/) (test runner)
+- [Kotest Assertions](https://kotest.io/docs/assertions/assertions.html) (assertion framework)
 - [GitHub CI](https://docs.github.com/en/actions)
 
 ## Usage

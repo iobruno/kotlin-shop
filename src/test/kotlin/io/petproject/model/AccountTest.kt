@@ -1,10 +1,10 @@
 package io.petproject.model
 
 import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
 
-internal class AccountTest {
+internal class AccountTest : AnnotationSpec() {
 
     @Test
     fun `when name is blank, throw IllegalArgEx`() {

@@ -1,11 +1,11 @@
 package io.petproject.model
 
 import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.petproject.model.ProductType.PHYSICAL
-import org.junit.jupiter.api.Test
 
-internal class ItemTest {
+internal class ItemTest : AnnotationSpec() {
 
     @Test
     fun `when quantity is lower than or equalTo 0, throw IllegalArgEx`() {

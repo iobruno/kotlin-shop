@@ -1,16 +1,15 @@
 package io.petproject.model
 
 import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.petproject.model.OrderStatus.ACTIVATED
 import io.petproject.model.OrderStatus.PENDING_ACTIVATION
 import io.petproject.model.ProductType.PHYSICAL
 import io.petproject.model.ProductType.SUBSCRIPTION
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import java.time.YearMonth
 
-internal class SubscriptionOrderTest {
+internal class SubscriptionOrderTest : AnnotationSpec() {
 
     private val billingAddress by lazy {
         Address.builder

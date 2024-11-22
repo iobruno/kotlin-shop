@@ -1,17 +1,16 @@
 package io.petproject.model
 
 import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.petproject.model.OrderStatus.DELIVERED
 import io.petproject.model.ProductType.DIGITAL
 import io.petproject.model.ProductType.PHYSICAL
 import io.petproject.model.ProductType.PHYSICAL_TAX_FREE
 import io.petproject.model.ShippingLabel.TAX_FREE
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import java.time.YearMonth
 
-internal class PhysicalOrderTest {
+internal class PhysicalOrderTest : AnnotationSpec() {
 
     private val billingAddress: Address by lazy {
         Address.builder
