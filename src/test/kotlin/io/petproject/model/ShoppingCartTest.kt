@@ -4,7 +4,6 @@ import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 
-
 internal class ShoppingCartTest : AnnotationSpec() {
     private val shoppingCart = ShoppingCart()
 
@@ -36,8 +35,6 @@ internal class ShoppingCartTest : AnnotationSpec() {
         shoppingCart.items.clear()
     }
 
-
-
     @Test
     fun `when adding a Product with quantity lowerThan or equalTo 0, throw IllegalArgEx`() {
         shouldThrowExactly<IllegalArgumentException> {
@@ -49,7 +46,7 @@ internal class ShoppingCartTest : AnnotationSpec() {
     fun `when adding a Product that is already in the Cart, add up to the quantity`() {
         val videoGameDigitalCopy = Product("Nier:Automata", ProductType.DIGITAL, 129.90)
         shoppingCart.add(videoGameDigitalCopy, 10)
-        shoppingCart.items.get(videoGameDigitalCopy).let { it?.quantity shouldBe 14  }
+        shoppingCart.items.get(videoGameDigitalCopy).let { it?.quantity shouldBe 14 }
     }
 
     @Test
