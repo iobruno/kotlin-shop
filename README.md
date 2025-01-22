@@ -1,7 +1,11 @@
 # Kotlin Shop
-![Kotlin](https://img.shields.io/badge/Kotlin-2.0-603DC0.svg?style=flat&logo=kotlin&logoColor=white&labelColor=603DC0)
-![JDK](https://img.shields.io/badge/JDK-21-3F90BD.svg?style=flat&logo=openjdk&logoColor=white&labelColor=3F90BD)
-![Gradle](https://img.shields.io/badge/gradle-8.x-02303A?style=flat&logo=gradle&logoColor=white&labelColor=02303A)
+
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1-603DC0.svg?style=flat&logo=kotlin&logoColor=white&labelColor=603DC0)](https://github.com/JetBrains/kotlin/releases/tag/v2.1.10)
+[![JDK](https://img.shields.io/badge/JDK-21-1076C6?style=flat&logo=openjdk&logoColor=FFFFFF&labelColor=1076C6)](https://sdkman.io/)
+[![KoTest](https://img.shields.io/badge/Kotest-5.9-262A38.svg?style=flat&logo=kotlin&logoColor=16F802&labelColor=262A38)](https://kotest.io/docs/framework/testing-styles.html)
+[![JUnit 5](https://img.shields.io/badge/JUnit_5-262A38.svg?style=flat&logo=junit5&logoColor=white&labelColor=262A38)](https://junit.org/junit5/)
+[![Gradle](https://img.shields.io/badge/gradle-8.12-02303A?style=flat&logo=gradle&logoColor=white&labelColor=02303A)](https://gradle.org/releases/)
+
 ![GitHub Actions](https://github.com/iobruno/kotlin-shop/actions/workflows/kotlin-shop-ci.yml/badge.svg?branch-master&event=push)
 [![codecov](https://codecov.io/gh/iobruno/kotlin-shop/branch/master/graph/badge.svg?token=MYqE0qrhbs)](https://codecov.io/gh/iobruno/kotlin-shop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3203ff55a8ce4d832e8d/maintainability)](https://codeclimate.com/github/iobruno/kotlin-shop/maintainability)
@@ -9,16 +13,10 @@
 This is just a pet project of mine to play with Kotlin stdlib
 
 For this, I'm simulating an eCommerce platform as close as I can, model-wise. 
-I took inspiration based on my understanding of how Amazon handles Physical, Digital
-and Subscription Orders
+I took inspiration based on my understanding of how Amazon handles Physical, Digital and Subscription Orders
 
-## Tech Stack
-- [Kotlin 2.x](https://github.com/JetBrains/kotlin/releases/tag/v2.0.20) (target: JVM 21)
-- [JUnit 5](https://junit.org/junit5/) (test runner)
-- [Kotest Assertions](https://kotest.io/docs/assertions/assertions.html) (assertion framework)
-- [GitHub CI](https://docs.github.com/en/actions)
 
-## Usage
+## Getting Started
 ```kotlin
 fun main() {
 
@@ -184,7 +182,8 @@ and also to wrap all the complexity of creating an Order, this Shopping Cart ent
     - Each item that falls under `Membership` will create a different Membership Order 
     (due to the complexity of activating each subscription individually, and probably through 3rd-party APIs) 
 
-## TODO
+
+## TODO's:
 - [x] Build Automation with CI (Travis CI)
 - [x] Code Coverage check
 - [x] Code Inspection for maintainability
