@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
-    kotlin("jvm") version "2.0.20"
+    kotlin("jvm")
     jacoco
 }
 
@@ -21,11 +21,8 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
 
-tasks.withType<KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
-        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-    }
+kotlin {
+    jvmToolchain(21)
 }
 
 tasks.withType<Test>().configureEach {
