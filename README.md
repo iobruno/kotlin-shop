@@ -2,9 +2,9 @@
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1-262A38?style=flat-square&logo=kotlin&logoColor=603DC0&labelColor=262A38)](https://github.com/Kotlin/kotlin-spark-api)
 [![JDK](https://img.shields.io/badge/JDK-21_|_17-35667C?style=flat&logo=openjdk&logoColor=FFFFFF&labelColor=1D213B)](https://sdkman.io/)
+[![Gradle](https://img.shields.io/badge/gradle-9.3-31ADC3?style=flat&logo=gradle&logoColor=white&labelColor=011E24)](https://gradle.org/releases/)
 [![KoTest](https://img.shields.io/badge/Kotest-5.9-262A38.svg?style=flat&logo=kotlin&logoColor=16F802&labelColor=262A38)](https://kotest.io/docs/framework/testing-styles.html)
 [![JUnit 5](https://img.shields.io/badge/JUnit_5-262A38.svg?style=flat&logo=junit5&logoColor=white&labelColor=262A38)](https://junit.org/junit5/)
-[![Gradle](https://img.shields.io/badge/gradle-8.12-02303A?style=flat&logo=gradle&logoColor=white&labelColor=02303A)](https://gradle.org/releases/)
 
 ![GitHub Actions](https://github.com/iobruno/kotlin-shop/actions/workflows/kotlin-shop-ci.yml/badge.svg?branch-master&event=push)
 [![codecov](https://codecov.io/gh/iobruno/kotlin-shop/branch/master/graph/badge.svg?token=MYqE0qrhbs)](https://codecov.io/gh/iobruno/kotlin-shop)
